@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Light Bulb Game</title>
+  </head>
+
+  <body>
+    <div id="main">
+      <form id="data">
+        <h1>Light Bulb Game</h1>
+        <p id="description">
+          Once upon a time, King Unnamed of Nowhereland was both smiling and
+          crying at the same time. He was smiling because his enormous brand-new
+          palace with many spacious rooms and corridors has just been finished.
+          He is also crying as these rooms need to be illuminated and kept warm,
+          but the ongoing increase of utility costs affect him as well. So now
+          it's time to think about the placement of the palace's light bulbs. We
+          need to place them so that everything is properly lit, but we cannot
+          install any unnecessary bulbs.
+        </p>
+        <br />
+
+        <label for="name"> Name: </label>
+        <input type="text" id="name" name="playerName" />
+        <br /><br />
+
+        <h3>Choose the Difficulty Level:</h3>
+
+        <input type="radio" id="easyGame" name="radio" value="Easy" />
+        <label for="easyGame"> Easy </label>
+
+        <input type="radio" id="advancedGame" name="radio" value="Advanced" />
+        <label for="advancedGame"> Advanced </label>
+
+        <input type="radio" id="extremeGame" name="radio" value="Extreme" />
+        <label for="extremeGame"> Extreme </label>
+
+        <br /><br />
+        <button type="submit">Start</button>
+      </form>
+
+      <div class="gameSection">
+        <div id="nameAndTimeDiv">
+          <h4 id="name">Name:</h4>
+          <span id="nameSpan">ANees Umer </span>
+          <!-- 
+        <h4 id="time">Time Elapsed:</h4>
+        <span id="timeSpan"> 00.00</span> -->
+        </div>
+
+        <div id="tableDiv">
+          <table id="table"></table>
+        </div>
+
+        <div id="resultDiv">
+          <button id="checkButton">Check Game</button>
+          <span id="resultSpan"> Hey Wow your game has some issues</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
