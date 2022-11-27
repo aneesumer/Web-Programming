@@ -1,13 +1,19 @@
 const form = document.getElementById("data");
 const game = document.querySelector(".gameSection");
 const playerName = document.querySelector("#name");
+const timerSpan = document.querySelector('#timeSpan');
+const homePage = document.querySelector("#homePageButton");
 const radioButtons = document.getElementsByName("radio");
 const nameField = document.querySelector("#nameSpan");
 const table = document.querySelector("#table");
+const checkGame = document.querySelector("#checkButton");
+const resultSpan = document.querySelector("#resultSpan");
+const restart = document.querySelector("#restartButton");
 let gameType = null;
+let gameT = null;
 let gameDimensions = null;
-let redFailedState = 0;
-
+let passed = false;
+let start = null;
 
 const easy = [
   ["", "", "", "1,B", "", "", ""],
@@ -42,22 +48,59 @@ const extreme = [
   ["", "", "", "", "", "", "", "", "0,B", ""],
 ];
 
+const copyEasy = [
+  ["", "", "", "1,B", "", "", ""],
+  ["", "0,B", "", "", "", "2,B", ""],
+  ["", "", "", "", "", "", ""],
+  ["-1,B", "", "", "-1,B", "", "", "-1,B"],
+  ["", "", "", "", "", "", ""],
+  ["", "-1,B", "", "", "", "2,B", ""],
+  ["", "", "", "3,B", "", "", ""],
+];
+const copyAdvanced = [ 
+  ["", "", "0,B", "", "-1,B", "", ""],
+  ["", "", "", "", "", "", ""],
+  ["-1,B", "", "-1,B", "", "3,B", "", "-1,B"],
+  ["", "", "", "1,B", "", "", ""],
+  ["2,B", "", "-1,B", "", "-1,B", "", "-1,B"],
+  ["", "", "", "", "", "", ""],
+  ["", "", "-1,B", "", "2,B", "", ""],
+];
+const copyExtreme = [
+  ["", "-1,B", "", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "3,B", "", "2,B", "", "-1,B"],
+  ["", "0,B", "-1,B", "", "", "", "", "-1,B", "", ""],
+  ["", "", "", "", "-1,B", "", "", "", "", ""],
+  ["", "1,B", "", "", "-1,B", "1,B", "-1,B", "", "", ""],
+  ["", "", "", "-1,B", "-1,B", "-1,B", "", "", "3,B", ""],
+  ["", "", "", "", "", "-1,B", "", "", "", ""],
+  ["", "", "1,B", "", "", "", "", "0,B", "-1,B", ""],
+  ["3,B", "", "-1,B", "", "0,B", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", "", "0,B", ""],
+];
+
+
 form.addEventListener("submit", (event) => {
   form.style.display = "none";
   game.style.display = "block";
   nameField.innerText = playerName.value;
 
   for (let i = 0; i < radioButtons.length; i++) {
-    if (radioButtons[i].checked) gameType = radioButtons[i].value;
+    if (radioButtons[i].checked) gameT = radioButtons[i].value;
   }
 
-  if (gameType === "Easy") (gameType = easy), (gameDimensions = 7);
-  else if (gameType === "Advanced") (gameType = advanced), (gameDimensions = 7);
+  if (gameT === "Easy") (gameType = easy), (gameDimensions = 7);
+  else if (gameT === "Advanced") (gameType = advanced), (gameDimensions = 7);
   else (gameType = extreme), (gameDimensions = 10);
-
+  
   tableGenerator(gameType, gameDimensions);
+  start = Date.now();
   event.preventDefault();
 });
+
+checkGame.addEventListener('click', checkGameFunction);
+restart.addEventListener('click', restartFunction);
+homePage.addEventListener('click', homePageFunction);
 
 delegate(table, "click", "td", clickHandler);
 
@@ -70,7 +113,6 @@ function clickHandler() {
     
     if (gameType[rowIndex][columnIndex] === "" ) {
         gameType[rowIndex][columnIndex] = "1,LB";
-       
     }
     else {
       gameType[rowIndex][columnIndex] = (parseInt(gameType[rowIndex][columnIndex].split(",")[0]) + 1).toString() 
@@ -81,6 +123,7 @@ function clickHandler() {
     lightSpreader(rowIndex, columnIndex, this);
     redColorCheck();
     numberedBlackBoxCheck();
+    checkGameFunction();
     
   // Bulb Removal  
   } else if (gameType[rowIndex][columnIndex].split(",")[1] === "LB") {
@@ -97,6 +140,7 @@ function clickHandler() {
     lightRemover(rowIndex, columnIndex, this);
     yellowColorCheck();
     numberedBlackBoxRevert();
+    checkGameFunction();
   }
 }
 
@@ -191,8 +235,7 @@ function lightSpreader(i, j, td) {
     k.cells[j].style.backgroundColor = "yellow";
     r++;
   }
-
-  //console.log(gameType);
+  
 }
 
 function lightRemover(i, j, td) {
@@ -265,8 +308,7 @@ function lightRemover(i, j, td) {
     }
     r++;
   }
-
-  console.log(gameType);
+  
 }
 
 function redColorCheck () {
@@ -389,6 +431,94 @@ function numberedBlackBoxRevert() {
     }
   }
 
+function checkGameFunction () {
+  let redFailedState = true;
+  for (let i = 0; i < gameDimensions; i++) {
+    let row = table.rows[i];
+    for (let j = 0; j < gameDimensions; j++) {
+      let col = row.cells[j];
+      if (typeof (parseInt(gameType[i][j].split(",")[0])) === 'number' &&
+          parseInt(gameType[i][j].split(",")[0]) !== -1 && gameType[i][j].split(",")[1] === "B") {
+        if (col.style.backgroundColor === 'green') {
+          redFailedState = redFailedState && true;
+        }
+        else {
+          redFailedState = redFailedState && false;
+        }
+      }
+      
+      if (col.style.backgroundColor === 'red') {
+        redFailedState = redFailedState && false;
+      }
+      
+      if (col.style.backgroundColor === "" || col.style.backgroundColor === "transparent") {
+        redFailedState = redFailedState && false;
+      }
+
+    }
+  }
+
+  if (redFailedState) resultSpan.innerText = "You Won !!" , end = Date.now() , passed = true;
+  else resultSpan.innerText = "Your game has some issues", passed = false ;
+}
+
+function restartFunction() {
+  if (gameT === "Easy") {
+    for (let i = 0; i < gameDimensions; i++) {
+      for (let j = 0; j < gameDimensions; j++) {
+        gameType[i][j] = copyEasy[i][j];
+      }
+    }
+  
+  table.innerHTML = "";
+  tableGenerator(easy, gameDimensions);
+
+  }
+  if (gameT === "Advanced") {
+    for (let i = 0; i < gameDimensions; i++) {
+      for (let j = 0; j < gameDimensions; j++) {
+        gameType[i][j] = copyAdvanced[i][j];
+      }
+    }
+
+    table.innerHTML = "";
+    tableGenerator(advanced, gameDimensions);
+  }
+
+  if (gameT === "Extreme") {
+    for (let i = 0; i < gameDimensions; i++) {
+      for (let j = 0; j < gameDimensions; j++) {
+        gameType[i][j] = copyExtreme[i][j];
+      }
+    }
+
+    table.innerHTML = "";
+    tableGenerator(extreme, gameDimensions);
+  }
+
+  start = Date.now();
+  passed = false;
+  console.log(gameType);
+}
+
+function homePageFunction () {
+  alert("The Game will be Erased");
+  restartFunction();
+  table.innerHTML = "";
+  game.style.display = "none";
+  form.style.display = "block";
+ 
+}
+
+setInterval(function(){
+  if (!passed) {
+    console.log("Time");
+      let dt = Math.floor((Date.now() - start) / 1000)
+      let sec = String(dt % 60).padStart(2, '0')
+      let min = ('0' + Math.floor(dt / 60)).slice(-2)
+      timerSpan.innerText = `${min}:${sec}`
+  }
+}, 500)
 
 function delegate(parent, type, selector, handler) {
   parent.addEventListener(type, function (event) {
