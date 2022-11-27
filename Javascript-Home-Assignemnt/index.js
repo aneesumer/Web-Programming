@@ -3,12 +3,15 @@ const game = document.querySelector(".gameSection");
 const playerName = document.querySelector("#name");
 const timerSpan = document.querySelector('#timeSpan');
 const homePage = document.querySelector("#homePageButton");
+const resultName = document.querySelector("#resultPlayer");
+const resultMap = document.querySelector("#resultMap");
+const resulttime = document.querySelector("#resultTime");
 const radioButtons = document.getElementsByName("radio");
 const nameField = document.querySelector("#nameSpan");
 const table = document.querySelector("#table");
 const checkGame = document.querySelector("#checkButton");
-const resultSpan = document.querySelector("#resultSpan");
 const restart = document.querySelector("#restartButton");
+
 let gameType = null;
 let gameT = null;
 let gameDimensions = null;
@@ -48,36 +51,9 @@ const extreme = [
   ["", "", "", "", "", "", "", "", "0,B", ""],
 ];
 
-const copyEasy = [
-  ["", "", "", "1,B", "", "", ""],
-  ["", "0,B", "", "", "", "2,B", ""],
-  ["", "", "", "", "", "", ""],
-  ["-1,B", "", "", "-1,B", "", "", "-1,B"],
-  ["", "", "", "", "", "", ""],
-  ["", "-1,B", "", "", "", "2,B", ""],
-  ["", "", "", "3,B", "", "", ""],
-];
-const copyAdvanced = [ 
-  ["", "", "0,B", "", "-1,B", "", ""],
-  ["", "", "", "", "", "", ""],
-  ["-1,B", "", "-1,B", "", "3,B", "", "-1,B"],
-  ["", "", "", "1,B", "", "", ""],
-  ["2,B", "", "-1,B", "", "-1,B", "", "-1,B"],
-  ["", "", "", "", "", "", ""],
-  ["", "", "-1,B", "", "2,B", "", ""],
-];
-const copyExtreme = [
-  ["", "-1,B", "", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "3,B", "", "2,B", "", "-1,B"],
-  ["", "0,B", "-1,B", "", "", "", "", "-1,B", "", ""],
-  ["", "", "", "", "-1,B", "", "", "", "", ""],
-  ["", "1,B", "", "", "-1,B", "1,B", "-1,B", "", "", ""],
-  ["", "", "", "-1,B", "-1,B", "-1,B", "", "", "3,B", ""],
-  ["", "", "", "", "", "-1,B", "", "", "", ""],
-  ["", "", "1,B", "", "", "", "", "0,B", "-1,B", ""],
-  ["3,B", "", "-1,B", "", "0,B", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", "", "0,B", ""],
-];
+const copyEasy = JSON.parse(JSON.stringify(easy));
+const copyAdvanced = JSON.parse(JSON.stringify(advanced));
+const copyExtreme = JSON.parse(JSON.stringify(extreme));
 
 
 form.addEventListener("submit", (event) => {
@@ -119,7 +95,7 @@ function clickHandler() {
       + "," + "LB";
     }
     this.style.backgroundColor = "yellow";
-    this.innerHTML = ' <img id="bulb" src="bulb.png">';
+    this.innerHTML = ' <img id="bulb" src="/images/bulb.png">';
     lightSpreader(rowIndex, columnIndex, this);
     redColorCheck();
     numberedBlackBoxCheck();
@@ -503,6 +479,11 @@ function restartFunction() {
 
 function homePageFunction () {
   alert("The Game will be Erased");
+  if (passed) {
+    resultName.innerText = playerName.value;
+    resultMap.innerText = gameT;
+    resulttime.innerText = timerSpan.innerText;
+  } 
   restartFunction();
   table.innerHTML = "";
   game.style.display = "none";
