@@ -19,13 +19,13 @@ body {
 
 #main {
   height: 700px;
-  width: 60%;
+  width: 80%;
   margin: auto;
   position: relative;
   text-align: center;
   border-style: solid;
   border-width: 3px;
-  background-image: url(pikrepo.jpg);
+  background-image: url(./images/pikrepo.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -101,4 +101,9 @@ td {
 #bulb {
     width: 30px;
     height: 30px;
+}
+ 
+#resultPlayer, #resultTime, #resultMap{
+  display:inline-block;
+
 }
