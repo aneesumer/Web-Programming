@@ -25,7 +25,7 @@
         <br />
 
         <label for="name"> Name: </label>
-        <input type="text" id="name" name="playerName" />
+        <input type="text" id="name" name="playerName" required/>
         <br /><br />
 
         <h3>Choose the Difficulty Level:</h3>
@@ -39,7 +39,14 @@
         <input type="radio" id="extremeGame" name="radio" value="Extreme" />
         <label for="extremeGame"> Extreme </label>
 
-        <br /><br />
+        <div id="previousGameResult"></div>
+          <h3> Previous Game Results :</h3>
+        
+          <p>Name: </p> <p id="resultPlayer"> gfsf</p>
+          <p>Map Name: </p> <p id="resultMap"> </p>
+          <p>Time Elapsed: </p> <p id="resultTime"> </p>
+        
+          <br /><br />
         <button type="submit">Start</button>
       </form>
 
@@ -47,9 +54,11 @@
         <div id="nameAndTimeDiv">
           <h4 id="name">Name:</h4>
           <span id="nameSpan">ANees Umer </span>
-          <!-- 
-        <h4 id="time">Time Elapsed:</h4>
-        <span id="timeSpan"> 00.00</span> -->
+          
+          <h4 id="time">Time Elapsed:</h4>
+          <span id="timeSpan"></span>
+
+          <button id="homePageButton"> Home Page</button>
         </div>
 
         <div id="tableDiv">
@@ -59,6 +68,10 @@
         <div id="resultDiv">
           <button id="checkButton">Check Game</button>
           <span id="resultSpan"> Hey Wow your game has some issues</span>
+        </div>
+
+        <div id="restart">
+          <button id="restartButton"> Restart</button>
         </div>
       </div>
     </div>
